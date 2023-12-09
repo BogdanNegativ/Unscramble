@@ -10,6 +10,25 @@ class GameViewModel : ViewModel() {
     val currentScrambledWord: String
         get() = _currentScrambledWord
 
+    private var wordsList: MutableList<String> = mutableListOf()
+    private lateinit var currentWord: String
+    private fun getNextWord() {
+        currentWord = allWordsList.random()
+        val tempWord = currentWord.toCharArray()
+        tempWord.shuffle()
+
+        while (String(tempWord).equals(currentWord, false)) {
+            tempWord.shuffle()
+        }
+        if (wordsList.contains(currentWord)) {
+            getNextWord()
+        } else {
+            _currentScrambledWord = String(tempWord)
+            ++currentWordCount
+            wordsList.add(currentWord)
+        }
+    }
+
     init {
         Log.d("GameFragment", "GameViewModel created!")
     }
